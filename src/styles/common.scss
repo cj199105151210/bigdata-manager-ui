@@ -1,0 +1,329 @@
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+menu,
+legend,
+input,
+textarea,
+p,
+figure,
+th,
+td {
+  margin: 0;
+  padding: 0;
+}
+
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+
+body {
+  font: normal 12px/1.5 "Noto", "Microsoft YaHei", "tahoma", "arial", "sans-serif";
+  color: #333;
+  background: #f6f6f6;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+fieldset,
+img {
+  border: 0;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+caption,
+th {
+  text-align: left;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+  font-weight: normal;
+}
+
+q:before,
+q:after {
+  content: "";
+}
+
+a {
+  text-decoration: none;
+  color: #111;
+  outline: none;
+  border: none;
+  -moz-outline: none;
+}
+
+a:hover {
+  text-decoration: none;
+  outline: none;
+  border: none;
+  -moz-outline: none;
+}
+
+abbr,
+acronym {
+  border: 0;
+  font-variant: normal;
+}
+
+sup {
+  vertical-align: text-top;
+}
+
+sub {
+  vertical-align: text-bottom;
+}
+
+img {
+  max-width: 100%;
+}
+
+input,
+textarea {
+  background: white;
+}
+
+input,
+select,
+button,
+img {
+  vertical-align: middle;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+input {
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.clearfix {
+  *zoom: 1;
+}
+
+.clearfix:after {
+  display: block;
+  clear: both;
+  content: "\0020";
+  visibility: hidden;
+  height: 0;
+}
+
+input,
+textarea,
+select {
+  *font-size: 100%;
+}
+
+i,
+u {
+  font-style: normal;
+  text-decoration: none;
+}
+
+.left,
+.li_left li {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.ell {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.hide {
+  display: none;
+}
+
+.container-top {
+  margin-top: 1.2rem;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+// 全局变量
+@import "./variables.scss";
+// ele样式覆盖
+@import "./element-ui.scss";
+// 顶部右侧显示
+@import "./top.scss";
+// 导航标签
+@import "./tags.scss";
+// 工具类函数
+@import "./mixin.scss";
+// 侧面导航栏
+@import "./sidebar.scss";
+// 动画
+@import "./animate/vue-transition.scss";
+//适配
+@import "./media.scss";
+//通用配置
+@import "./normalize.scss";
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+* {
+  outline: none;
+}
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: #ebf2fa;
+  height: 100%;
+}
+.avue-crud__box .el-card__body {
+  padding-top: 0px;
+}
+.el-card__body {
+  padding: 0px;
+}
+.main_left_content,
+.main_middle_content,
+.main_right_content {
+  background: white;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+
+.avue-crud__header {
+  margin-bottom: 15px;
+  .el-form.el-form--inline {
+    border-bottom: 1px dashed #ddd;
+  }
+  .el-form-item {
+    margin-bottom: 15px;
+  }
+}
+
+// 弹出框样式
+.el-dialog__wrapper {
+  .el-dialog {
+    width: 61% !important;
+    .avue-crud__dialog--overflow,
+    .dialog-main-tree {
+      max-height: 400px;
+      overflow: hidden;
+      overflow-y: auto;
+    }
+  }
+}
+
+// 表格
+.el-table {
+  // max-height: 746px;
+  overflow-y: auto;
+}
+
+.el-table--medium td{
+  padding:11px 0!important
+}
+.filter-container {
+  margin: 15px 0px 10px;
+  padding-bottom: 15px;
+  border-bottom: 1px dashed #ddd;
+  .el-button-group .el-button:not(:last-child) {
+    margin-right: 3px;
+    margin-bottom:7px;
+  }
+}
+
+// 去掉avue 表格右上角中的按钮
+.avue-crud__right{
+  button:nth-child(2),
+  button:nth-child(3){
+    display: none
+  }
+}
+// 左侧书接口选中的高亮
+.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{
+  background: #2676E3;
+  color: white
+}
+
+// 菜单管理选项中标题样式
+.el-card__header {
+  border-bottom: 1px dashed #ddd;
+  margin-bottom: 15px;
+  .menu-card__header{
+    font-size: 16px;
+    // padding: 22px 20px;
+    font-weight: bold;
+    color: #606266;
+  }
+}
+
+// avue table中的分页样式
+.avue-crud__pagination{
+  height: auto;
+  margin-top: 10px;
+}
+
+// 按钮大小调整
+.el-button--mini, .el-button--small,.el-button--medium{
+  font-size: 14px;
+}

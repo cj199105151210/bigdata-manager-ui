@@ -1,0 +1,100 @@
+.avue-top {
+  padding: 0 20px;
+  position: relative;
+  background: #0b59a1;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 28px;
+  height: 60px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  .el-menu-item {
+    i,
+    span {
+      font-size: 13px;
+    }
+  }
+}
+.avue-breadcrumb {
+  height: 100%;
+  line-height: 64px;
+  cursor: pointer;
+  .collapse-icon {
+    display: block;
+    margin-top: 17px;
+    width: 25px;
+    height: 25px;
+    background: url(./../assets/meau.png) no-repeat center;
+    background-size: 100%;
+  }
+  &--active {
+    .collapse-icon {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.top-bar__img {
+  margin: 0 8px 0 5px;
+  padding: 2px;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+.top-bar__left,
+.top-nav__left,
+.top-bar__right {
+  height: 64px;
+  position: absolute;
+  top: 0;
+  i {
+    line-height: 64px;
+    color: white;
+  }
+  span {
+    color: white;
+    cursor: pointer;
+  }
+}
+
+.top-nav__left {
+  left: 100px;
+  margin-right: 20px;
+  overflow: auto;
+}
+.top-bread__left {
+  left: 90px;
+  background: rgb(69, 70, 138);
+}
+
+.top-bar__right {
+  right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+// 新增一级导航
+.top-bar {
+  .item {
+    float: left;
+    padding: 0 15px;
+    margin-right: 15px;
+    height: 60px;
+    font-size: 16px;
+    line-height: 60px;
+    a {
+      display: block;
+      color: white;
+      cursor: pointer;
+    }
+    &.active {
+      background: #2676e3;
+    }
+    span {
+      margin-left: 5px;
+    }
+  }
+}
