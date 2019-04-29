@@ -69,6 +69,7 @@
     name: 'aggrgateway',
     data() {
       return {
+        param: {},
         obj:{},
         tableData: [],
         page: {
@@ -113,18 +114,33 @@
         var validateCheckName = (rule, value, callback) => {
           if(!value){
             callback(new Error('请输入名称'));
+            return
           }
-            checkName(value, this.obj.gatewayId).then(response => {
-              if (response.data) {
-                callback(new Error('该名称已存在！请重新输入'));
-              } else {
-                callback();
-              }
-            })
+          if(value.length > 20 || value.length < 1){
+            callback(new Error('名称最小长度为1，最大长度为20'));
+            return
+          }
+          checkName(value, this.obj.gatewayId).then(response => {
+            if (response.data) {
+              callback(new Error('该名称已存在！请重新输入'));
+            } else {
+              callback();
+            }
+          })
         };
         var validateCheckCode = (rule, value, callback) => {
           if(!value){
             callback(new Error('请输入编码'));
+            return
+          }
+          if(value.length > 20 || value.length < 8){
+            callback(new Error('编码最小长度为8，最大长度为20'));
+            return
+          }
+          var reg =/[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/gi;
+          if (reg.test(value)){
+            callback(new Error('编码中不可包含中文字符'));
+            return
           }
           checkCode(value, this.obj.gatewayId).then(response => {
             if (response.data) {
@@ -157,6 +173,7 @@
         })
       },
       handleFilter(param) {
+        this.param = param
         this.page.page = 1;
         this.getList(this.page, param);
       },
@@ -197,7 +214,7 @@
             type: 'success'
           })
           this.page.page = 1;
-          this.getList(this.page);
+          this.getList(this.page, this.param);
         }).catch(function(err) { })
       },
       handleBatchEnable(row, index) {
@@ -226,8 +243,7 @@
             message: '启用成功',
             type: 'success'
           })
-          this.page.page = 1;
-          this.getList(this.page);
+          this.getList(this.page, this.param);
         }).catch(function(err) { })
       },
       handleBatchDisable(row, index) {
@@ -256,8 +272,7 @@
             message: '禁用成功',
             type: 'success'
           })
-          this.page.page = 1;
-          this.getList(this.page);
+          this.getList(this.page, this.param);
         }).catch(function(err) { })
       },
       rowDel: function(row, index) {
@@ -276,7 +291,7 @@
             type: 'success'
           })
           this.page.page = 1;
-          this.getList(this.page);
+          this.getList(this.page, this.param);
         }).catch(function(err) { })
       },
       /**
@@ -295,8 +310,7 @@
             type: 'success'
           })
           done()
-          this.page.page = 1;
-          this.getList(this.page);
+          this.getList(this.page, this.param);
         })
       },
       /**
@@ -314,15 +328,14 @@
             type: 'success'
           })
           done()
-          this.page.page = 1;
-          this.getList(this.page);
+          this.getList(this.page, this.param);
         })
       },
       /**
        * 刷新回调
        */
       refreshChange() {
-        this.getList(this.page);
+        this.getList(this.page, this.param);
       }
     }
   }

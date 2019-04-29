@@ -4,7 +4,7 @@ export const tableOption = {
   indexLabel: '序号',
   stripe: true,
   menuAlign: 'center',
-  menuWidth: 150,
+  menu:false,
   align: 'center',
   refreshBtn: true,
   showClomnuBtn: false,
@@ -14,6 +14,7 @@ export const tableOption = {
   delBtn: false,
   viewBtn: true,
   dicUrl: '/api/admin/dict/type/log_type',
+  dialogClickModal: false, // 限制弹框点击灰色背景关闭
   props: {
     label: 'label',
     value: 'value'
@@ -22,7 +23,15 @@ export const tableOption = {
     label: '类型',
     prop: 'type',
     type: 'select',
-    dicData: 'log_type',
+    formsolt: true,
+    solt: true,
+    dicData: [{
+      label: '正常',
+      value: '0'
+    }, {
+      label: '异常',
+      value: '1'
+    }],
     search: true
   }, {
     label: '标题',
@@ -37,11 +46,11 @@ export const tableOption = {
     label: '客户端',
     prop: 'serviceId'
   }, {
-    width: 80,
+    minWidth: 80,
     label: '请求时间',
     prop: 'time'
   }, {
-    width: 150,
+    minWidth: 150,
     label: '创建时间',
     prop: 'createTime',
     type: 'datetime',

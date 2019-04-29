@@ -1,6 +1,6 @@
 import { getStore, setStore } from '@/utils/store'
 import { isURL } from '@/utils/validate'
-import { login, logout, getInfo, getMenu } from '@/api/login'
+import { login, logout, getInfo, getMenu,refreshToken } from '@/api/login'
 import { deepClone, encryption, handleImg } from '@/utils/util'
 import webiste from '@/const/website'
 
@@ -122,7 +122,6 @@ const user = {
     SET_USER_ISINITIAL: (state, isInitial) => {
       state.isInitial = isInitial
     },
-    
     SET_PERMISSIONS: (state, permissions) => {
       const list = {}
       for (let i = 0; i < permissions.length; i++) {
@@ -168,7 +167,7 @@ const user = {
           commit('SET_AVATAR', data.sysUser.avatar)
           commit('SET_ROLES', data.roles || [])
           commit('SET_PERMISSIONS', data.permissions || [])
-          commit('SET_USER_ISINITIAL',true)
+          commit('SET_USER_ISINITIAL',data.isInitial)
           resolve(data)
         }).catch((err) => {
           reject()
@@ -225,7 +224,6 @@ const user = {
           commit('SET_REFRESH_TOKEN', '')
           commit('SET_EXPIRES_IN', '')
           commit('SET_ROLES', [])
-          commit('DEL_ALL_TAG')
           commit('SET_SHOW_INDEX', -1)
           commit('SET_COLLAPSE_LOGOUT')
           commit('SET_USER_ISINITIAL',true)
@@ -247,7 +245,6 @@ const user = {
           commit('SET_REFRESH_TOKEN', '')
           commit('SET_EXPIRES_IN', '')
           commit('SET_ROLES', [])
-          commit('DEL_ALL_TAG')
           commit('SET_SHOW_INDEX', -1)
           commit('SET_COLLAPSE_LOGOUT')
           commit('SET_USER_ISINITIAL',true)
@@ -255,8 +252,6 @@ const user = {
         resolve()
       })
     },
-
-
   }
 }
 

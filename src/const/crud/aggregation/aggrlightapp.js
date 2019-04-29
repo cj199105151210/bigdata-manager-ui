@@ -6,11 +6,10 @@ export const tableOption = {
   stripe: true,
   menuAlign: 'center',
   align: 'center',
-  editBtn: true,
-  delBtn: true,
+  editBtn: false,
+  delBtn: false,
   addBtn: false,
-  viewBtn: true,
-  menuType: 'text',
+  viewBtn: false,
   column: [
     {
       label: '应用图标',
@@ -47,9 +46,20 @@ export const tableOption = {
 	  {
       label: '应用链接',
       prop: 'url',
+      hide: true,
       rules: [{
         required: true,
         message: "请填写应用链接",
+        trigger: "blur"
+      }]
+    },
+    {
+      label: '编码',
+      prop: 'code',
+      hide: true,
+      rules: [{
+        required: true,
+        message: "请填写编码",
         trigger: "blur"
       }]
     },
@@ -72,15 +82,6 @@ export const tableOption = {
         trigger: "blur"
       }],
       valueDefault: '1'
-    },
-    {
-      label: '编码',
-      prop: 'code',
-      rules: [{
-        required: true,
-        message: "请填写编码",
-        trigger: "blur"
-      }]
     },
     {
       label: '服务类别',
@@ -142,7 +143,6 @@ export const tableOption = {
       type:'select',
       multiple: true,
       dicData:[],
-      search:true,
       rules: [{
         required: true,
         message: "请选择用户组",
@@ -154,7 +154,6 @@ export const tableOption = {
       prop: 'serviceDpt',
       type:'select',
       dicData:[],
-      search:true,
       rules: [{
         required: true,
         message: "请选择服务部门",
@@ -174,7 +173,6 @@ export const tableOption = {
     {
       label: '描述',
       prop: 'describeMsg',
-      component: "AvueUeditor",
       hide: true,
       span: 24
     }

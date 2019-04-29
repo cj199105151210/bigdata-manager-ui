@@ -9,8 +9,7 @@
             </el-form-item>
             <el-form-item label="登录终端类型:">
               <el-select v-model="formInline.loginType" placeholder="终端类型">
-                <el-option label="PC端" value="1"></el-option>
-                <el-option label="移动端" value="2"></el-option>
+                <el-option v-for="item in loginTypeList" :value="item.value" :key="item.value" :label="item.label"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -59,6 +58,7 @@
 
 <script>
 import { onSubmit } from "@/api/userCenter/loginLog";
+import { getDictionaryValue } from '@/api/userCenter/userControl'
 export default {
   name: "LoginLog",
   data() {
@@ -67,6 +67,7 @@ export default {
       currentPage: 1,
       pageSize: 7,
       tableData: [],
+      loginTypeList:[],
       formInline: {
         userName: "",
         loginType: ""
@@ -74,18 +75,36 @@ export default {
     };
   },
   mounted: function() {
+    this.DictionaryValue("login_type")
     this.Submit();
   },
   methods: {
-    formatRole1(row, column) {
-      if (row.loginType == 1) {
-        return "PC端";
-      } else if (row.loginType == 2) {
-        return "移动端";
-      } else {
-        return "未知的终端类型";
-      }
+    //获取字典值
+    DictionaryValue(dictKey){
+      getDictionaryValue(dictKey).then((result) => {
+        this.loginTypeList = result.data.data
+      }).catch((err) => {
+        
+      });
     },
+    formatRole1(row, column) {
+      for(var j = 0,len = this.loginTypeList.length;j<len;j++){
+        //debugger
+        if(row.loginType == this.loginTypeList[j].value){
+          return this.loginTypeList[j].label
+        }else if(row.loginType == null){
+          return "未知类型"
+        }
+      }
+      // if (row.loginType == 1) {
+      //   return "PC端";
+      // } else if (row.loginType == 2) {
+      //   return "移动端";
+      // } else {
+      //   return "未知的终端类型";
+      // }
+    },
+
     formatRole2(row, column) {
       if (row.optType == 1) {
         return "登录";
@@ -115,8 +134,10 @@ export default {
 
       onSubmit(currentPage, pageSize, userName, loginType)
         .then(result => {
+         
           this.tableData = result.data.data.content;
           this.total = result.data.data.totalElements;
+          // console.log(this.tableData)
         })
         .catch(err => {
           this.$message("加载出错，请刷新重试！");

@@ -63,7 +63,8 @@
 .top-nav__left {
   left: 100px;
   margin-right: 20px;
-  overflow: auto;
+  overflow-y: hidden;
+  overflow-x: auto
 }
 .top-bread__left {
   left: 90px;

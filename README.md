@@ -31,3 +31,18 @@ cnpm run build
 
 ```
 
+开发环境调整
+  dev: {
+    // Paths
+    assetsSubDirectory: 'static',
+    assetsPublicPath: '/',
+    proxyTable: {  //跨域问题
+      '/api': {
+        target: 'http://127.0.0.1:2999',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/'
+        }
+      }
+    },
+

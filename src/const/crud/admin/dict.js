@@ -2,14 +2,18 @@ export const tableOption = {
   border: true,
   index: true,
   indexLabel: '序号',
-  stripe: true,
+  stripe: false,
   menuAlign: 'center',
   align: 'center',
   refreshBtn: false,
   showClomnuBtn: false,
+  refreshBtn: true,
   searchSize: 'mini',
   editBtn: false,
   delBtn: false,
+  saveBtnTitle: '保存', // 弹出新增按钮标题
+  updateBtnTitle: '保存', //弹出框更新按钮标题
+  dialogClickModal: false, // 限制弹框点击灰色背景关闭
   column: [{
     label: '类型',
     prop: 'type',
@@ -17,6 +21,12 @@ export const tableOption = {
     rules: [{
       required: true,
       message: '请输入字典类型',
+      trigger: 'blur'
+    },
+    {
+      min: 2,
+      max: 64,
+      message: '长度在 2 到 64 个字符',
       trigger: 'blur'
     }]
   }, {
@@ -26,12 +36,24 @@ export const tableOption = {
       required: true,
       message: '请输入字典描述',
       trigger: 'blur'
+    },
+    {
+      min: 2,
+      max: 64,
+      message: '长度在 2 到 64 个字符',
+      trigger: 'blur'
     }]
   }, {
     label: '备注信息',
-    prop: 'remarks'
+    prop: 'remarks',
+    rules: [{
+      min: 0,
+      max: 64,
+      message: '长度在 2 到 64 个字符',
+      trigger: 'blur'
+    }]
   }, {
-    width: 150,
+    minWidth: 150,
     label: '创建时间',
     prop: 'createTime',
     type: 'datetime',
@@ -50,16 +72,21 @@ export const tableDictItemOption = {
   stripe: true,
   menuAlign: 'center',
   align: 'center',
-  refreshBtn: false,
+  editBtn: false,
+  delBtn: false,
+  refreshBtn: true,
   showClomnuBtn: false,
   searchSize: 'mini',
+  saveBtnTitle: '保存', // 弹出新增按钮标题
+  updateBtnTitle: '保存', //弹出框更新按钮标题
+  dialogClickModal: false, // 限制弹框点击灰色背景关闭
   column: [{
     label: '类型',
     prop: 'type',
     addDisabled: true,
     editDisabled: true
   }, {
-    width: 150,
+    minWidth: 150,
     label: '数据值',
     prop: 'value',
     rules: [{

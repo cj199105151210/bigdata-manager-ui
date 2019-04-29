@@ -209,7 +209,7 @@ export default {
     },
     // 刷新时获取数据
     getList(page, params) {
-      this.page.currentPage = page.currentPage
+      this.page.currentPage = page.currentPage;
       this.listLoading = true;
       // 调用数据列表方法
       fetchList(
@@ -347,7 +347,7 @@ export default {
               duration: 2000
             });
           })
-          .cache(() => {
+          .catch(() => {
             this.$notify({
               title: "失败",
               message: "重置密码失败",

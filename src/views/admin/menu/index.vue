@@ -13,6 +13,7 @@
                   icon="plus"
                   @click="handlerAdd('form')"
                 >添加</el-button>
+
                 <el-button
                   type="warning"
                   size="small"
@@ -20,6 +21,7 @@
                   icon="edit"
                   @click="handlerEdit"
                 >编辑</el-button>
+
                 <el-button
                   type="danger"
                   size="small"
@@ -33,6 +35,7 @@
             <el-tree
               class="filter-tree"
               node-key="id"
+              ref="tree"
               highlight-current
               :data="treeData"
               :default-expanded-keys="aExpandedKeys"
@@ -44,15 +47,18 @@
             ></el-tree>
           </div>
         </el-col>
+
         <el-col :xs="24" :sm="24" :md="19" class="user__main">
           <div class="main_right_content">
             <el-card class="box-card">
               <div slot="header" class="clearfix menu-card__header" v-if="formStatus === 'create'">
                 <span>添加菜单项</span>
               </div>
+
               <div slot="header" class="clearfix menu-card__header" v-if="formStatus === 'update'">
                 <span v-if="formStatus === 'update'">修改菜单项</span>
               </div>
+
               <el-form
                 :rules="rules"
                 :label-position="labelPosition"
@@ -63,6 +69,7 @@
                 <el-form-item label="标题" prop="name" required>
                   <el-input v-model="form.name" :disabled="formEdit" placeholder="请输入标题"></el-input>
                 </el-form-item>
+
                 <el-form-item label="类型" prop="type" required>
                   <el-select
                     class="filter-item"
@@ -78,45 +85,55 @@
                     ></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="按钮权限标识" prop="permission" v-if="form.type === '1'" required>
+
+                <el-form-item label="按钮权限标识" prop="permission" v-show="form.type == 1" required>
                   <el-input v-model="form.permission" :disabled="formEdit" placeholder="请输入权限标识"></el-input>
                 </el-form-item>
-                <el-form-item label="图标" v-if="form.type === '0'" prop="icon" required>
+
+                <el-form-item label="图标" prop="icon" v-show="form.type == 0" required>
                   <avue-crud-icon-select
+                    :disabled="formEdit"
                     :option="option"
                     v-model="form.icon"
                     :iconList="iconList"
                     placeholder="请输入图标"
                   ></avue-crud-icon-select>
                 </el-form-item>
-                <el-form-item label="排序" v-if="form.type === '0'" prop="sort">
+
+                <el-form-item label="排序" prop="sort" v-show="form.type == 0" required>
                   <el-input
                     type="number"
                     v-model="form.sort"
                     :disabled="formEdit"
-                    placeholder="请输入排序"
+                    placeholder="排序只能是数字"
                   ></el-input>
                 </el-form-item>
-                <el-form-item label="组件路径" v-if="form.type === '0'" prop="component" required>
+
+                <el-form-item label="组件路径" prop="component" v-show="form.type == 0" required>
                   <el-input
                     v-model.trim="form.component"
                     :disabled="formEdit"
                     placeholder="格式只能是Layout或者views/admin/user/index"
                   ></el-input>
                 </el-form-item>
-                <el-form-item label="路径别名" v-if="form.type === '0'" prop="path" required>
+
+                <el-form-item label="路径别名" prop="path" v-show="form.type == 0" required>
                   <el-input
                     v-model.trim="form.path"
                     :disabled="formEdit"
                     placeholder="格式只能是当前组件的简写路径类似于admin"
                   ></el-input>
                 </el-form-item>
+
                 <el-form-item v-if="formStatus === 'update'">
                   <el-button type="primary" size="small" @click="update('form')">更新</el-button>
+
                   <el-button @click="onCancel('form')" size="small">取消</el-button>
                 </el-form-item>
+
                 <el-form-item v-if="formStatus === 'create'">
                   <el-button type="primary" size="small" @click="create">保存</el-button>
+
                   <el-button @click="onAddCancel('form')" size="small">取消</el-button>
                 </el-form-item>
               </el-form>
@@ -210,8 +227,10 @@ export default {
     }
   },
   created() {
+    this.form = {
+      parentId: this.currentId
+    };
     this.getList();
-
     this.menuManager_btn_add = this.permissions["sys_menu_add"];
     this.menuManager_btn_edit = this.permissions["sys_menu_edit"];
     this.menuManager_btn_del = this.permissions["sys_menu_del"];
@@ -221,8 +240,14 @@ export default {
   },
   methods: {
     getList() {
+      let _this = this;
       fetchMenuTree(this.listQuery).then(response => {
         this.treeData = response.data.data;
+        if (_this.currentId !== -1) {
+          _this.$nextTick(function() {
+            _this.$refs["tree"].setCurrentKey(_this.currentId);
+          });
+        }
       });
     },
     filterNode(value, data) {
@@ -266,18 +291,17 @@ export default {
     },
 
     getNodeData(data) {
-      if (!this.formEdit) {
-        this.formStatus = "update";
-      }
+      this.formStatus = "";
       getObj(data.id).then(response => {
         this.form = response.data.data;
       });
       this.currentId = data.id;
       this.showElement = true;
+      this.formEdit = true;
     },
     handlerEdit() {
       // 判断是否有选择树结构
-      if (this.currentId) {
+      if (this.currentId !== -1) {
         this.formEdit = false;
         this.formStatus = "update";
       } else {
@@ -289,7 +313,7 @@ export default {
     handlerAdd(formName) {
       this.formEdit = false;
       this.formStatus = "create";
-      if (this.currentId) {
+      if (this.currentId !== -1) {
         this.$refs[formName].resetFields();
         this.form = {
           parentId: this.currentId
@@ -299,23 +323,30 @@ export default {
     },
     handleDelete(formName) {
       // 判断是否有选择树结构
-      if (this.currentId) {
+      let _this = this;
+      if (this.currentId !== -1) {
         this.$confirm("此操作将永久删除, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
           closeOnClickModal: false
         }).then(() => {
-          delObj(this.currentId).then(() => {
-            this.getList();
-            this.$refs[formName].resetFields();
-            this.onCancel();
-            this.$notify({
-              title: "成功",
-              message: "删除成功",
-              type: "success",
-              duration: 2000
-            });
+          delObj(this.currentId).then(res => {
+            if (res != undefined && res.data.code == 1) {
+              this.currentId = -1;
+              this.form = {
+                parentId: -1
+              };
+              this.getList();
+              this.onCancel("form");
+
+              this.$notify({
+                title: "成功",
+                message: "删除成功",
+                type: "success",
+                duration: 2000
+              });
+            }
           });
         });
       } else {
@@ -323,12 +354,16 @@ export default {
       }
     },
     update(formName) {
-      this.$refs.form.validate(valid => {
-        if (valid) {
+      // 选择图标
+      if (this.form.type == 1) {
+        let isUndefined =
+          this.form.name !== undefined && this.form.permission !== undefined;
+        let isTrue = this.form.name !== "" && this.form.permission !== "";
+        if (isTrue && isUndefined) {
           putObj(this.form).then(() => {
             this.defaultCurrent.push(this.currentId);
             this.getList();
-            this.onCancel("form");
+            this.cancel("form");
             this.$notify({
               title: "成功",
               message: "更新成功",
@@ -337,34 +372,96 @@ export default {
             });
           });
         }
-      });
+        // 选择菜单
+      } else if (this.form.type == 0) {
+        let isUndefined =
+          this.form.name !== undefined &&
+          this.form.icon !== undefined &&
+          this.form.sort !== undefined &&
+          this.form.component !== undefined &&
+          this.form.path !== undefined;
+        let isTrue =
+          this.form.name !== "" &&
+          this.form.icon !== "" &&
+          this.form.sort !== "" &&
+          this.form.component !== "" &&
+          this.form.path !== "";
+        if (isTrue && isUndefined) {
+          putObj(this.form).then(() => {
+            this.defaultCurrent.push(this.currentId);
+            this.getList();
+            this.cancel("form");
+            this.$notify({
+              title: "成功",
+              message: "更新成功",
+              type: "success",
+              duration: 2000
+            });
+          });
+        }
+      }
     },
     create() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
+      // 选择图标
+      if (this.form.type == 1) {
+        let isUndefined =
+          this.form.name !== undefined && this.form.permission !== undefined;
+        let isTrue = this.form.name !== "" && this.form.permission !== "";
+        if (isTrue && isUndefined) {
           addObj(this.form).then(() => {
             this.defaultCurrent.push(this.currentId);
             this.getList();
-            this.onCancel("form");
+            this.cancel("form");
             this.$notify({
               title: "成功",
               message: "创建成功",
               type: "success",
               duration: 2000
             });
-            debugger;
+            //debugger;
           });
         }
-      });
+        // 选择菜单
+      } else if (this.form.type == 0) {
+        let isUndefined =
+          this.form.name !== undefined &&
+          this.form.icon !== undefined &&
+          this.form.sort !== undefined &&
+          this.form.component !== undefined &&
+          this.form.path !== undefined;
+        let isTrue =
+          this.form.name !== "" &&
+          this.form.icon !== "" &&
+          this.form.sort !== "" &&
+          this.form.component !== "" &&
+          this.form.path !== "";
+        if (isTrue && isUndefined) {
+          addObj(this.form).then(() => {
+            this.defaultCurrent.push(this.currentId);
+            this.getList();
+            this.cancel("form");
+            this.$notify({
+              title: "成功",
+              message: "创建成功",
+              type: "success",
+              duration: 2000
+            });
+          });
+        }
+      }
     },
     onCancel(formName) {
-      if (this.currentId) {
+      if (this.currentId !== -1) {
         getObj(this.form.menuId).then(response => {
           this.form = response.data.data;
         });
       } else {
         this.$refs[formName].resetFields();
       }
+      this.formEdit = true;
+      this.formStatus = "";
+    },
+    cancel(formName) {
       this.formEdit = true;
       this.formStatus = "";
     },
@@ -386,7 +483,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" >
+<style lang="scss">
 #menu-page {
   .el-dialog__wrapper .el-dialog {
     padding-bottom: 30px;

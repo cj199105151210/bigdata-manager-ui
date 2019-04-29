@@ -129,15 +129,13 @@
                                 </template>
                                 <template v-if="form.typeFlag != '12' && form.typeFlag">
                                     <el-form-item label="用户组" prop="groupMsg">
-                                        <el-select class="filter-item" multiple 
-                                                v-model="form.groupMsg"
-                                                :disabled="formEdit"
-                                                placeholder="请输入用户组">
-                                        <el-option v-for="item in  groupMsgOptions"
-                                                    :key="item.code"
-                                                    :label="item.cname"
-                                                    :value="item.code"></el-option>
-                                        </el-select>
+                                        <treeselect v-model="form.groupMsg" 
+                                            openDirection="top"
+                                            :multiple="true" 
+                                            :options="groupMsgOptions" 
+                                            value-consists-of="ALL" 
+                                            placeholder="请选择用户组"
+                                            :disabled="treeDisabled"/>
                                     </el-form-item>
                                 </template>
                                 <template v-if="form.typeFlag == '12'">
@@ -162,7 +160,7 @@
                                         <el-table-column prop="url" label="链接" width="200"></el-table-column>
                                         <el-table-column prop="describe_msg" label="描述"></el-table-column>
                                         <el-table-column prop="open_mode" :formatter="openModeFormatter" label="打开方式" width="100"></el-table-column>
-                                        <el-table-column label="操作" width="90" v-if="!formEdit">
+                                        <el-table-column label="操作" width="120" v-if="!formEdit">
                                             <template slot-scope="scope">
                                                 <el-button @click="handleClick(scope.row,scope.$index)" type="text" size="small">编辑</el-button>
                                                 <el-button @click.native.prevent="deleteRow(scope.$index)" type="text" size="small">删除</el-button>
@@ -281,10 +279,16 @@
 <script>
     import {upload, fetchList, addObj, delObj, fetchMenuTree, getCodeDetailFromDB, getGroupMsg, getObj} from '@/api/aggregation/subjectManage'
     import {mapGetters} from 'vuex'
+    import Treeselect from '@riophae/vue-treeselect'
+    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
     export default {
         name: 'subject',
+        components: {
+            Treeselect 
+        },
         data() {
             return {
+                treeDisabled:undefined,
                 searchAppName:'',
                 addSlideShowFlag: false,
                 selectLightAppFlag: false,
@@ -394,7 +398,7 @@
             getType() {
                 // 获取用户组信息
                 getGroupMsg().then(response => {
-                    this.groupMsgOptions = response.data.data
+                    this.groupMsgOptions = response.data.data[1]
                 })
                 getCodeDetailFromDB("gateway_type").then(response => {
                     this.gatewayTypeOptions = response.data.data
@@ -465,6 +469,7 @@
             },
             getNodeData(data) {
                 this.formEdit = true
+                this.treeDisabled = 'disabled'
                 // 获取节点详细信息
                 let subjectId = -1;
                 let gatewayId = -1;
@@ -523,6 +528,7 @@
                 let gatewayId = JSON.parse(JSON.stringify(this.form.gatewayId))
                 let parentSubjectId = JSON.parse(JSON.stringify(this.form.subjectId))
                 this.formEdit = false
+                this.treeDisabled = undefined
                 // 表单重置方法会漏掉某些属性，所以手动再重置一遍
                 this.form.subjectId = undefined
                 this.form.gatewayId = JSON.parse(JSON.stringify(gatewayId))
@@ -546,6 +552,7 @@
             },
             handlerEdit() {
                 this.formEdit = false
+                this.treeDisabled = undefined
             },
             handleDelete() {
                 if(this.$refs.tree.getCurrentNode().children){

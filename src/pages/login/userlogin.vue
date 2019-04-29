@@ -118,7 +118,7 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapGetters(["tagWel", "isInitial"])
+    ...mapGetters(["tagWel", "isInitial", "roles",'menu']),
   },
   props: [],
   methods: {
@@ -142,28 +142,37 @@ export default {
           this.$store
             .dispatch("Login", this.loginForm)
             .then(() => {
-              if (this.isInitial) {
-                this.$confirm(
-                  "您当前使用的是初始密码，请到个人中心进行修改!",
-                  "提示",
-                  {
-                    title: "密码警告",
-                    cancelButtonText: "忽略",
-                    confirmButtonText: "去改密码",
-                    type: "warning",
-                    closeOnClickModal: false
-                  }
-                )
-                  .then(() => {
-                    this.$router.push({
-                      path: "/info",
-                      query: {
-                        id: true
-                      }
-                    });
+              if (this.roles.length === 0) {
+                this.$store
+                  .dispatch("GetInfo")
+                  .then(res => {
+                    if (res.isInitial) {
+                      this.$confirm(
+                        "您当前使用的是初始密码，请到个人中心进行修改!",
+                        "提示",
+                        {
+                          title: "密码警告",
+                          cancelButtonText: "忽略",
+                          confirmButtonText: "去改密码",
+                          type: "warning",
+                          closeOnClickModal: false
+                        }
+                      )
+                        .then(() => {
+                          this.$router.push({
+                            path: "/info",
+                            query: {
+                              id: res.isInitial
+                            }
+                          });
+                        })
+                        .catch(() => {
+                          this.$router.push({ path: this.tagWel.value });
+                        });
+                    }
                   })
                   .catch(() => {
-                    this.$router.push({ path: this.tagWel.value });
+                    this.$router.push({ path: '/login' });
                   });
               }
             })

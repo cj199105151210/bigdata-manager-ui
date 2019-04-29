@@ -39,29 +39,26 @@ export function updateRecord(addFrom) {
   })
 }
 
-export function selectReader(currentPage, pageSize, noticeId, xm) {
+export function setStick(addFrom) {
+  return request({
+    url: '/api/operation/notice/setStick',
+    method: 'post',
+    data: addFrom
+  })
+}
+
+export function selectReader(readerCurrentPage, readerPageSize, noticeId, xm) {
   return request({
     url: '/api/operation/notice/getReader',
     method: 'get',
     params: {
-      pageNum: currentPage,
-      pageSize: pageSize,
+      pageNum: readerCurrentPage,
+      pageSize: readerPageSize,
       noticeId: noticeId,
       xm: xm
     }
   })
 }
-
-export function stick(guid) {
-  return request({
-    url: '/api/operation/notice/stick',
-    method: 'get',
-    params: {
-      noticeId: guid
-    }
-  })
-}
-
 
 export function removeFile(file) {
   return request({
@@ -81,18 +78,39 @@ export function uploadFile(fileData) {
   })
 }
 
-export function nameSplice(arr) {
-  var str = ''
-  for (var j = 0, len = arr.length; j < len; j++) {
-    str = str + arr[j].name + ';'
-  }
-  return str
+export function selectDetail(guid) {
+  return request({
+    url: '/api/operation/notice/selectDetail',
+    method: 'get',
+    params: {
+      noticeId: guid
+    }
+  })
 }
 
-export function userIdSplice(arr) {
+export function downLoad(file) {
+  return request({
+    url: '/api/operation/notice/downLoad',
+    method: 'get',
+    params:{
+      name: file.name,
+      fileName: file.fileName
+    }
+  })
+}
+
+// export function nameSplice(arr) {
+//   var str = ''
+//   for (var j = 0, len = arr.length; j < len; j++) {
+//     str = str + arr[j].name + ';'
+//   }
+//   return str
+// }
+
+export function IdAndNameSplice(arr) {
   var str = ''
   for (var j = 0, len = arr.length; j < len; j++) {
-    str = str + arr[j].id + '-'
+    str = str + arr[j].id + ':' +arr[j].name+';'
   }
   return str
 }

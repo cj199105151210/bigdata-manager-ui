@@ -1,11 +1,11 @@
 <template>
-  <div id="wrap" style="padding:2%">
+  <div id="wrap">
     <basic-container>
       <div class="main_middle_content">
         <div v-show="isShow">
           <el-button
             @click="handleAdd"
-            style="margin-bottom:2%"
+            style="margin:1%"
             type="primary"
             icon="el-icon-edit"
             size="small"
@@ -25,19 +25,19 @@
               <template slot-scope="scope">
                 <el-button
                   @click="handleDelete(scope.$index, scope.row)"
-                  size="small"
+                  size="mini"
                   type="text"
                   icon="el-icon-delete"
                 >删除</el-button>
                 <el-button
                   @click="handleEdit(scope.$index, scope.row)"
-                  size="small"
+                  size="mini"
                   type="text"
                   icon="el-icon-edit"
                 >修改</el-button>
                 <el-button
                   @click="handleRead(scope.$index, scope.row)"
-                  size="small"
+                  size="mini"
                   type="text"
                   icon="el-icon-view"
                 >查看</el-button>
@@ -72,9 +72,9 @@
               ></el-input>
             </el-form-item>
           </el-form>
-          <el-button @click="submit" style="margin-left:8%" type="success">发布</el-button>
-          <el-button @click="save" type="primary">保存</el-button>
-          <el-button @click="back">返回</el-button>
+          <el-button @click="submit" style="margin-left:8%" type="success" size="small">发布</el-button>
+          <el-button @click="save" type="primary" size="small">保存</el-button>
+          <el-button @click="back" size="small">返回</el-button>
         </div>
       </div>
     </basic-container>

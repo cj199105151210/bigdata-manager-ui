@@ -8,33 +8,10 @@ export function fetchList(query) {
   })
 }
 
-export function addObj(obj) {
-  return request({
-    url: '/api/aggr/aggrlightapp',
-    method: 'post',
-    data: obj
-  })
-}
-
-export function getObj(id) {
-  return request({
-    url: '/api/aggr/aggrlightapp/' + id,
-    method: 'get'
-  })
-}
-
 export function delObj(id) {
   return request({
     url: '/api/aggr/aggrlightapp/' + id,
     method: 'delete'
-  })
-}
-
-export function putObj(obj) {
-  return request({
-    url: '/api/aggr/aggrlightapp',
-    method: 'put',
-    data: obj
   })
 }
 
@@ -58,5 +35,29 @@ export function batchDelObj (objs) {
     url: '/api/aggr/aggrlightapp/batchDelObj',
     method: 'post',
     data: objs
+  })
+}
+
+export function saveOrUpdate(obj) {
+  return request({
+    url: '/api/aggr/aggrlightapp',
+    method: 'post',
+    data: obj
+  })
+}
+
+export function checkName(name, lightappId) {
+  return request({
+    url: '/api/aggr/aggrlightapp/checkName',
+    method: 'get',
+    params: {'name' : name, 'lightappId' : lightappId}
+  })
+}
+
+export function checkCode(code, lightappId) {
+  return request({
+    url: '/api/aggr/aggrlightapp/checkCode',
+    method: 'get',
+    params: {'code' : code, 'lightappId' : lightappId}
   })
 }

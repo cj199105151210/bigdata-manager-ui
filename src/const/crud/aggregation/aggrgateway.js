@@ -17,6 +17,11 @@ export const tableOption = {
       rules: [{
         trigger: "blur",
         validator: undefined
+      },
+      {
+        required: true,
+        message: "请输入名称",
+        trigger: "blur"
       }]
     },
 	  {
@@ -26,6 +31,11 @@ export const tableOption = {
       rules: [{
         trigger: "blur",
         validator: undefined
+      },
+      {
+        required: true,
+        message: "请输入编码",
+        trigger: "blur"
       }]
     },
 	  {

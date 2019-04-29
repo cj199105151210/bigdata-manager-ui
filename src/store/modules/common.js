@@ -11,23 +11,16 @@ const common = {
     isLock: getStore({ name: 'isLock' }) || false,
     showTag: getStore({ name: 'showTag' }),
     showCollapse: getStore({ name: 'showCollapse' }), 
-    showFullScren: getStore({ name: 'showFullScren' }),
     showMenu: getStore({ name: 'showMenu' }),
     website: website
   },
   actions: {},
   mutations: {
-    SET_SHADE: (state, active) => {
-      state.isShade = active
-    },
     SET_COLLAPSE_LOGOUT: (state) => {
       state.isCollapse = true
     },
     SET_COLLAPSE: (state) => {
       state.isCollapse = !state.isCollapse
-    },
-    SET_FULLSCREN: (state) => {
-      state.isFullScren = !state.isFullScren
     },
     SET_SHOWCOLLAPSE: (state, active) => {
       state.showCollapse = active
@@ -53,13 +46,6 @@ const common = {
     SET_SCREEN: (state, screen) => {
       state.screen = screen
     },
-    SET_THEME: (state, color) => {
-      state.theme = color
-      setStore({
-        name: 'theme',
-        content: state.theme
-      })
-    }
   }
 }
 export default common

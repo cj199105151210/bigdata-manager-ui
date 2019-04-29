@@ -5,13 +5,16 @@
         <el-col :xs="24" :sm="24" :md="5" class="user__tree">
           <div class="main_left_content">
             <el-tree
-              :data="data"
-              node-key="id"
-                show-checkbox
-              :default-expanded-keys="[5]"
-              :default-checked-keys="[5]"
-              :props="defaultProps"
-            ></el-tree>
+        :data="data"
+        show-checkbox
+        default-expand-all
+        node-key="id"
+        ref="tree"
+        :highlight-current="true"
+        check-strictly
+        @node-click="handleNodeChecked"
+        >
+        </el-tree>
           </div>
         </el-col>
         <el-col :xs="24" :sm="24" :md="19" class="user__main">
@@ -82,6 +85,10 @@ export default {
         label: "label"
       }
     };
-  }
+  },
+  methods: {
+    handleNodeChecked () {
+    }
+  },
 };
 </script>

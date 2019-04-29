@@ -1,5 +1,5 @@
 <template>
-  <div id="middleLeave">
+  <div>
     <basic-container>
       <el-row :span="24">
         <el-col :xs="24" :sm="24" :md="24" class="user__main">
@@ -140,9 +140,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  #middleLeave{
-    height: 100%;
-    // text-align: center;
-  }
 </style>
 

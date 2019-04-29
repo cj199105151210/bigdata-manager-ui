@@ -46,13 +46,18 @@ export const tableOption = {
       }
     ]
   }, {
-    width: 150,
     label: '角色描述',
     prop: 'roleDesc',
     overHidden: true,
-    span: 24
+    span: 24,
+    rules: [{
+        min: 0,
+        max: 60,
+        message: '长度不能超过60个字符',
+        trigger: 'blur'
+      }
+    ]
   }, {
-    width: 180,
     label: '数据权限',
     prop: 'dsType',
     type: 'select',
@@ -87,7 +92,7 @@ export const tableOption = {
     type: 'datetime',
     format: 'yyyy-MM-dd HH:mm',
     valueFormat: 'yyyy-MM-dd HH:mm:ss',
-    width:150,
+    minWidth:150,
     editVisdiplay: false,
     addVisdiplay: false,
     span: 24

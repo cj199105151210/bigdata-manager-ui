@@ -94,6 +94,18 @@ export default {
     this.selectRecord()
   },
   methods: {
+    //跳转页面
+    currentPageChange(val) {
+      this.pageNum = val;
+      this.selectRecord();
+    },
+    //扩大单页展示
+    currentSizeChange(val) {
+      this.pageSize = val;
+      this.pageNum = 1;
+      this.selectRecord();
+    },
+    //分页查询
     selectRecord(){
       selectAll(this.pageNum,this.pageSize).then((result) => {
         this.tabledata = result.data.data.rows
@@ -113,6 +125,7 @@ export default {
         this.formData.content = '',
         this.formData.name = ''
     },
+    
     //删除按钮
     deleteHandle(index, row) {
       let that = this

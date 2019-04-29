@@ -1,10 +1,9 @@
 import request from '@/utils/request'
 
-export function fetchDeptTree (query) {
+export function fetchDeptTree () {
   return request({
     url: '/api/admin/dept/tree',
-    method: 'get',
-    params: query
+    method: 'get'
   })
 }
 

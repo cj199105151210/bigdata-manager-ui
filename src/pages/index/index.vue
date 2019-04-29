@@ -32,7 +32,7 @@ import { calcDate } from "@/utils/date.js";
 import { getStore } from "@/utils/store.js";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import store from "@/store/";
+import store from "@/store";
 import Breadcrumb from "./bread-crumb";
 
 export default {

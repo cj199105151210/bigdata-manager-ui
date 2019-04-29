@@ -13,6 +13,7 @@
                   icon="plus"
                   @click="handlerAdd('form')"
                 >添加</el-button>
+
                 <el-button
                   type="warning"
                   size="small"
@@ -20,6 +21,7 @@
                   icon="edit"
                   @click="handlerEdit"
                 >编辑</el-button>
+
                 <el-button
                   type="danger"
                   size="small"
@@ -29,8 +31,10 @@
                 >删除</el-button>
               </el-button-group>
             </div>
+
             <el-tree
               class="filter-tree"
+              ref="tree"
               :data="treeData"
               node-key="id"
               icon-class="el-icon-edit-outline"
@@ -42,15 +46,18 @@
             ></el-tree>
           </div>
         </el-col>
+
         <el-col :xs="24" :sm="24" :md="19">
           <div class="main_right_content">
             <el-card class="box-card">
               <div slot="header" class="clearfix menu-card__header" v-if="formStatus === 'create'">
                 <span>添加菜单项</span>
               </div>
+
               <div slot="header" class="clearfix menu-card__header" v-if="formStatus === 'update'">
-                <span v-if="formStatus === 'update'">修改菜单项</span>
+                <span>修改菜单项</span>
               </div>
+
               <el-form
                 :label-position="labelPosition"
                 label-width="110px"
@@ -61,6 +68,7 @@
                 <el-form-item label="部门名称" prop="name" required>
                   <el-input v-model="form.name" :disabled="formEdit" placeholder="请输入名称"></el-input>
                 </el-form-item>
+
                 <el-form-item label="排序" prop="sort" required>
                   <el-input
                     type="number"
@@ -69,12 +77,16 @@
                     placeholder="请输入排序"
                   ></el-input>
                 </el-form-item>
+
                 <el-form-item v-if="formStatus == 'update'">
-                  <el-button type="primary" @click="update">更新</el-button>
+                  <el-button type="primary" @click="update('form')">更新</el-button>
+
                   <el-button @click="onCancel('form')">取消</el-button>
                 </el-form-item>
+
                 <el-form-item v-if="formStatus == 'create'">
                   <el-button type="primary" @click="create">保存</el-button>
+
                   <el-button @click="onAddCancel('form')">取消</el-button>
                 </el-form-item>
               </el-form>
@@ -112,7 +124,15 @@ export default {
       },
       rules: {
         deptId: [{ required: true, message: "请输入节点编号" }],
-        name: [{ required: true, message: "请输入部门名称" },{ min: 1, max: 24, message: '部门名称长度不能超出24个文字',trigger: 'blur' }],
+        name: [
+          { required: true, message: "请输入部门名称" },
+          {
+            min: 1,
+            max: 24,
+            message: "部门名称长度不能超出24个文字",
+            trigger: "blur"
+          }
+        ],
         sort: [{ required: true, message: "请输入排序" }]
       },
       labelPosition: "right",
@@ -130,6 +150,9 @@ export default {
   },
   created() {
     this.getList();
+    this.form = {
+      parentId: this.currentId
+    };
     this.deptManager_btn_add = this.permissions["sys_dept_add"];
     this.deptManager_btn_edit = this.permissions["sys_dept_edit"];
     this.deptManager_btn_del = this.permissions["sys_dept_del"];
@@ -139,8 +162,14 @@ export default {
   },
   methods: {
     getList() {
+      let _this = this;
       fetchTree(this.listQuery).then(response => {
         this.treeData = response.data.data;
+        if (_this.currentId !== -1) {
+          _this.$nextTick(function() {
+            _this.$refs["tree"].setCurrentKey(_this.currentId);
+          });
+        }
       });
     },
     filterNode(value, data) {
@@ -148,9 +177,7 @@ export default {
       return data.label.indexOf(value) !== -1;
     },
     getNodeData(data) {
-      if (!this.formEdit) {
-        this.formStatus = "update";
-      }
+      this.formStatus = "";
       getObj(data.id).then(response => {
         this.form = response.data.data;
       });
@@ -159,7 +186,7 @@ export default {
     },
     handlerEdit() {
       // 判断是否有选择树结构
-      if (this.currentId) {
+      if (this.currentId !== -1) {
         this.formEdit = false;
         this.formStatus = "update";
       } else {
@@ -170,7 +197,7 @@ export default {
     handlerAdd(formName) {
       this.formEdit = false;
       this.formStatus = "create";
-      if (this.currentId) {
+      if (this.currentId !== -1) {
         this.$refs[formName].resetFields();
         this.form = {
           parentId: this.currentId
@@ -180,34 +207,41 @@ export default {
     },
     handleDelete(formName) {
       // 判断是否有选择树结构
-      if (this.currentId) {
+      if (this.currentId !== -1) {
         this.$confirm("此操作将永久删除, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
           closeOnClickModal: false
         }).then(() => {
-          delObj(this.currentId).then(() => {
-            this.getList();
-            this.$refs[formName].resetFields();
-            this.onCancel();
-            this.$notify({
-              title: "成功",
-              message: "删除成功",
-              type: "success",
-              duration: 2000
-            });
+          delObj(this.currentId).then(res => {
+            if (res != undefined && res.data.code == 1) {
+              this.currentId = -1;
+              this.form = {
+                parentId: -1
+              };
+              this.$refs[formName].resetFields();
+              this.getList();
+              this.$notify({
+                title: "成功",
+                message: "删除成功",
+                type: "success",
+                duration: 2000
+              });
+            }
           });
         });
       } else {
         this.$message("当前没有选中菜单项，请选中菜单后编辑!");
       }
     },
-    update() {
+    update(formName) {
+      let _this = this;
       this.$refs.form.validate(valid => {
         if (!valid) return;
         putObj(this.form).then(() => {
           this.getList();
+          this.cancel("form");
           this.$notify({
             title: "成功",
             message: "更新成功",
@@ -218,17 +252,20 @@ export default {
       });
     },
     create() {
+      let _this = this;
       this.$refs.form.validate(valid => {
-        if (!valid) return;
-        addObj(this.form).then(() => {
-          this.getList();
-          this.$notify({
-            title: "成功",
-            message: "创建成功",
-            type: "success",
-            duration: 2000
+        if (valid) {
+          addObj(this.form).then(() => {
+            this.getList();
+            this.cancel("form");
+            this.$notify({
+              title: "成功",
+              message: "创建成功",
+              type: "success",
+              duration: 2000
+            });
           });
-        });
+        }
       });
     },
     onCancel(formName) {
@@ -242,7 +279,15 @@ export default {
       this.formEdit = true;
       this.formStatus = "";
     },
+    cancel() {
+      this.formEdit = true;
+      this.formStatus = "";
+    },
     onAddCancel(formName) {
+      this.from = {
+        name: "",
+        sort: ""
+      };
       this.$refs[formName].resetFields();
     },
     resetForm() {

@@ -35,9 +35,9 @@
                 </el-form>
               </div>
               <el-row style="text-align:left;margin-bottom:1%">
-                <el-button size="mini" type="primary" @click="orgAddUser" icon="el-icon-edit">添加</el-button>
+                <el-button size="small" type="primary" @click="orgAddUser" icon="el-icon-edit">添加</el-button>
                 <el-button
-                  size="mini"
+                  size="small"
                   type="success"
                   @click="updatePass"
                   icon="el-icon-edit-outline"
@@ -76,14 +76,14 @@
                       icon="el-icon-edit"
                     >编辑</el-button>
                     <el-button
-                      v-if="scope.row.isDelete !=1"
+                      v-if="scope.row.isDelete ==0"
                       size="mini"
                       type="text"
                       @click="handleDelete(scope.$index, scope.row)"
                       icon="el-icon-delete"
-                    >删除</el-button>
+                    >禁用</el-button>
                     <el-button
-                      v-if="scope.row.isDelete == 1"
+                      v-if="scope.row.isDelete !=0"
                       size="mini"
                       type="text"
                       icon="el-icon-refresh"
@@ -144,7 +144,7 @@
                   @check-change="orgHandleClick"
                 ></el-tree>
               </el-scrollbar>
-              <el-button type="text" style="margin-left: 100px;" @click="editUserOrg">
+              <el-button type="text" style="margin-left: 100px;" @click="editUserOrg" size="mini">
                 加入
                 <i class="el-icon-d-arrow-right"></i>
               </el-button>
@@ -155,13 +155,14 @@
               <span>{{userName}} 所在机构</span>
               <span>
                 关键字：
-                <input
+                <el-input
                   type="text"
                   v-model="searchIuput"
                   auto-complete="off"
                   placeholder="请输入关键字"
                   style="width:30%"
-                >
+                  size="mini"
+                ></el-input>
                 <el-button type="primary" icon="el-icon-search" size="mini" @click="searchOrg">搜索</el-button>
               </span>
               <el-table
@@ -192,7 +193,7 @@
                   </template>
                 </el-table-column>
               </el-table>
-              <el-button type="text" style="margin-right: 360px;" @click="removeOrgRelation">
+              <el-button type="text" style="margin-right: 360px;" @click="removeOrgRelation" size="mini">
                 <i class="el-icon-d-arrow-left"></i>移出
               </el-button>
             </div>
@@ -227,7 +228,7 @@
                   @check-change="flowHandleClick"
                 ></el-tree>
               </el-scrollbar>
-              <el-button type="text" style="margin-left: 100px;" @click="editUserFlow">
+              <el-button type="text" style="margin-left: 100px;" @click="editUserFlow" size="mini">
                 加入
                 <i class="el-icon-d-arrow-right"></i>
               </el-button>
@@ -238,13 +239,14 @@
               <span>{{userName}} 所在岗位流程</span>
               <span>
                 关键字：
-                <input
+                <el-input
                   type="text"
                   auto-complete="off"
                   v-model="searchIuput"
                   placeholder="请输入关键字"
                   style="width:30%"
-                >
+                  size="mini"
+                ></el-input>
                 <el-button type="primary" icon="el-icon-search" size="mini" @click="searchFlow">搜索</el-button>
               </span>
               <el-table
@@ -258,7 +260,7 @@
                 <el-table-column type="index" label="序号" align="center"></el-table-column>
                 <el-table-column property="cname" label="岗位流程" align="center"></el-table-column>
               </el-table>
-              <el-button type="text" style="margin-right: 360px;" @click="removeFlowRelation">
+              <el-button type="text" style="margin-right: 360px;" @click="removeFlowRelation" size="mini">
                 <i class="el-icon-d-arrow-left"></i>移出
               </el-button>
             </div>
@@ -293,7 +295,7 @@
                   @check-change="groupHandleClick"
                 ></el-tree>
               </el-scrollbar>
-              <el-button type="text" style="margin-left: 100px;" @click="editUserGroup">
+              <el-button type="text" style="margin-left: 100px;" @click="editUserGroup" size="mini">
                 加入
                 <i class="el-icon-d-arrow-right"></i>
               </el-button>
@@ -304,13 +306,14 @@
               <span>{{userName}} 所在用户组</span>
               <span>
                 关键字：
-                <input
+                <el-input
                   type="text"
                   v-model="searchIuput"
                   auto-complete="off"
                   placeholder="请输入关键字"
                   style="width:25%"
-                >
+                  size="mini"
+                ></el-input>
                 <el-button type="primary" icon="el-icon-search" size="mini" @click="searchGroup">搜索</el-button>
               </span>
               <el-table
@@ -324,7 +327,7 @@
                 <el-table-column type="index" label="序号" align="center"></el-table-column>
                 <el-table-column property="cname" label="用户组" align="center"></el-table-column>
               </el-table>
-              <el-button type="text" style="margin-right: 360px;" @click="removeGroupRelation">
+              <el-button type="text" style="margin-right: 360px;" @click="removeGroupRelation" size="mini">
                 <i class="el-icon-d-arrow-left"></i>移出
               </el-button>
             </div>
@@ -368,9 +371,7 @@
             </el-form-item>
             <el-form-item label="证件类型:" prop="cardType" label-width="100px">
               <el-select v-model="formData.cardType" placeholder="请选择">
-                <el-option label="身份证" value="1"></el-option>
-                <el-option label="港澳台证件" value="2"></el-option>
-                <el-option label="国外证件" value="3"></el-option>
+               <el-option v-for="item in cardList " :key="item.value" :value="item.value" :label="item.label"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="手机:" prop="phone" label-width="100px">
@@ -378,11 +379,7 @@
             </el-form-item>
             <el-form-item label="职务:" prop="duty" label-width="100px">
               <el-select v-model="formData.duty" placeholder="请选择">
-                <el-option label="厅局级正职" value="1"></el-option>
-                <el-option label="县处级正职" value="2"></el-option>
-                <el-option label="乡科级正职" value="3"></el-option>
-                <el-option label="主任科员" value="4"></el-option>
-                <el-option label="科员" value="5"></el-option>
+               <el-option v-for="item in positionList " :key="item.value" :value="item.value" :label="item.label"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -412,10 +409,7 @@
             </el-form-item>
             <el-form-item label="身份:" prop="type" label-width="100px">
               <el-select v-model="formData.type" placeholder="请选择">
-                <el-option label="学生" value="1"></el-option>
-                <el-option label="教职工" value="2"></el-option>
-                <el-option label="家长" value="3"></el-option>
-                <el-option label="企业" value="4"></el-option>
+                <el-option v-for="item in identityList " :key="item.value" :value="item.value" :label="item.label"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="证件号:" prop="idCard" label-width="100px">
@@ -431,8 +425,8 @@
         </el-row>
       </el-form>
       <div slot="footer">
-        <el-button type="primary" @click="submit('formData')">确 定</el-button>
-        <el-button @click="handleClose('formData')">取 消</el-button>
+        <el-button type="primary" @click="submit('formData')" size="small">确 定</el-button>
+        <el-button @click="handleClose('formData')" size="small">取 消</el-button>
       </div>
       <!-- </div> -->
     </el-dialog>
@@ -470,8 +464,8 @@
         </el-row>
       </el-form>
       <div slot="footer">
-        <el-button type="primary" @click="updatePassword('form1')">确 定</el-button>
-        <el-button @click="handleClose('form1')">取 消</el-button>
+        <el-button type="primary" @click="updatePassword('form1')" size="small">确 定</el-button>
+        <el-button @click="handleClose('form1')" size="small">取 消</el-button>
       </div>
     </el-dialog>
 
@@ -502,9 +496,7 @@
             </el-form-item>
             <el-form-item label="证件类型:" prop="cardType" label-width="100px">
               <el-select v-model="formData.cardType" placeholder="请选择">
-                <el-option label="身份证" value="1"></el-option>
-                <el-option label="港澳台证件" value="2"></el-option>
-                <el-option label="国外证件" value="3"></el-option>
+               <el-option v-for="item in cardList " :key="item.value" :value="item.value" :label="item.label"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="手机:" prop="phone" label-width="100px">
@@ -512,11 +504,7 @@
             </el-form-item>
             <el-form-item label="职务:" prop="duty" label-width="100px">
               <el-select v-model="formData.duty" placeholder="请选择">
-                <el-option label="厅局级正职" value="1"></el-option>
-                <el-option label="县处级正职" value="2"></el-option>
-                <el-option label="乡科级正职" value="3"></el-option>
-                <el-option label="主任科员" value="4"></el-option>
-                <el-option label="科员" value="5"></el-option>
+               <el-option v-for="item in positionList " :key="item.value" :value="item.value" :label="item.label"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -536,10 +524,7 @@
             </el-form-item>
             <el-form-item label="身份:" prop="type" label-width="100px">
               <el-select v-model="formData.type" placeholder="请选择">
-                <el-option label="学生" value="1"></el-option>
-                <el-option label="教职工" value="2"></el-option>
-                <el-option label="家长" value="3"></el-option>
-                <el-option label="企业" value="4"></el-option>
+                <el-option v-for="item in identityList " :key="item.value" :value="item.value" :label="item.label"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="证件号:" prop="idCard" label-width="100px">
@@ -555,8 +540,8 @@
         </el-row>
       </el-form>
       <div slot="footer">
-        <el-button type="primary" @click="onSubmit('formData1')">确 定</el-button>
-        <el-button @click="handleClose('formData1')">取 消</el-button>
+        <el-button type="primary" @click="onSubmit('formData1')" size="small">确 定</el-button>
+        <el-button @click="handleClose('formData1')" size="small">取 消</el-button>
       </div>
 
       <!-- </div> -->
@@ -593,7 +578,8 @@ import {
   selectUseMessage,
   restart,
   deleteUser,
-  searchUser
+  searchUser,
+  getDictionaryValue
 } from "@/api/userCenter/userControl";
 export default {
   name: "UserControl",
@@ -694,21 +680,26 @@ export default {
       }
     };
     return {
-      treeI1: 0,
-      treeI2: 0,
-      treeI3: 0,
-      treeI4: 0,
-      data1: [],
-      data2: [],
-      data3: [],
-      data4: [],
+      treeI1: 0,//主页面机构树单选初始化值
+      treeI2: 0,//机构管理弹窗树单选初始化值
+      treeI3: 0,//用户组管理
+      treeI4: 0,//流程岗位管理
+      data1: [],//主页面表
+      data2: [],//机构页面列表
+      data3: [],//用户组页面列表
+      data4: [],//流程岗位页面列表
+      //字典项集合
+      xbList:[],//性别集合
+      statusList:[],//状态集合
+      identityList:[],//身份类型集合
+      cardList:[],//证件类型集合
+      positionList:[],//职务类型集合
       tableData: [],
       orgTableData: [],
       groupTableData: [],
       flowTableData: [],
       currentOrgName: "",
       type: "",
-      status: "",
       userName: "",
       loginName: "",
       isShowCrew: "",
@@ -839,21 +830,47 @@ export default {
   },
 
   mounted: function() {
+    //获取状态及男女字典项
+    this.getDictionary("user_xb");
+    this.getDictionary("user_status");
+    //获取机构树
     this.getTree(1, 1);
-    this.getTree(2, 1);
-    this.getTree(3, 1);
+    //获取直属机构用户
     this.searchByXm();
   },
 
   methods: {
+
+    //获取字典值
+    getDictionary(dirtKey){
+      getDictionaryValue(dirtKey).then((result) => {
+        switch(dirtKey){
+          case "user_xb":
+            this.xbList = result.data.data
+            break;
+          case "user_status":
+            this.statusList = result.data.data
+            break;
+          case "user_position":
+            this.positionList = result.data.data
+            break;
+          case "identity_type":
+            this.identityList = result.data.data
+            break;
+          case "card_type":
+            this.cardList = result.data.data
+            break;
+        }
+      }).catch((err) => {
+        
+      });
+    },
     //通过姓名模糊查询所有人
     searchByXm() {
       searchUser(this.searchForm.xm).then((result) => {
-        //console.log(result)
-        //debugger
         this.tableData = result.data.data
       }).catch((err) => {
-        
+        this.$message("网络错误，请刷新重试")
       });
     },
     //关闭同时 清空验证信息
@@ -892,7 +909,7 @@ export default {
           }
         })
         .catch(err => {
-          alert("加载树出错，请重新加载");
+          this.$message("加载树出错，请重新加载");
         });
     },
     //切换树节点
@@ -954,6 +971,9 @@ export default {
 
     //添加按钮：打开添加用户对话框
     orgAddUser() {
+       this.getDictionary("user_position")
+       this.getDictionary("identity_type")
+       this.getDictionary("card_type")
       if (this.orgId !== "") {
         //console.log(checkNode)
         this.dialogFormVisible = true;
@@ -1128,8 +1148,8 @@ export default {
         if (valid) {
           addUser(_this.formData)
             .then(result => {
-              //console.log(result.data)
-              if (result.data.code === 0) {
+              console.log(result.data)
+              if (result.data.code === 1) {
                 _this.findUserByLn(_this.formData.loginName);
               } else {
                 _this.$message("新建用户有误，请重新添加！");
@@ -1150,7 +1170,12 @@ export default {
       let isDirect = 1;
       insertOrgRelation(_this.orgId, id, isDirect).then(re => {
         _this.dialogFormVisible = false;
-        this.selectUser("", this.treeNode, "");
+        if(_this.treeNode===""){
+          _this.searchByXm()
+        }else{
+          _this.selectUser("", _this.treeNode, "");
+        }
+       
         _this.$ref.form.resetFields();
         _this.$message({ message: "添加成功", type: "success" });
       });
@@ -1176,7 +1201,11 @@ export default {
           _this.formData.password = "";
           updateUser(_this.formData)
             .then(result => {
-              this.selectUser("", this.treeNode, "");
+              if(_this.treeNode ===""){
+                _this.searchByXm()
+              }else{
+                _this.selectUser("", _this.treeNode, "");
+              }
               _this.$message({ message: "修改成功", type: "success" });
               _this.dialogEdit = false;
             })
@@ -1261,18 +1290,30 @@ export default {
 
     //格式化性别
     formatRole1(row, column) {
-      return row.xb == 1 ? "男" : row.xb == 0 ? "女" : null;
+      for (var j = 0, len = this.xbList.length; j < len; j++) {
+        //debugger
+        if(row.xb == this.xbList[j].value){
+          return this.xbList[j].label
+        }
+      }
+      // return row.xb == 1 ? "男" : row.xb == 0 ? "女" : null;
     },
 
     //格式化状态
     formatRole2(row, column) {
-      if (row.isDelete == 1) {
-        this.status = false;
-        return "禁用";
-      } else {
-        this.status = true;
-        return "启用";
+      for (var j = 0, len = this.statusList.length; j < len; j++) {
+        //debugger
+        if(row.isDelete == this.statusList[j].value){
+          return this.statusList[j].label
+        }
       }
+      // if (row.isDelete == 1) {
+      //   this.status = false;
+      //   return "禁用";
+      // } else {
+      //   this.status = true;
+      //   return "启用";
+      // }
     },
 
     //格式化选择框
@@ -1306,12 +1347,15 @@ export default {
       let _this = this;
       _this.$refs[formName].validate(valid => {
         if (valid) {
-          updatePassword(_this.loginName, _this.form1.password)
-            .then(result => {
-              this.selectUser("", this.treeNode, "");
+          updatePassword(_this.loginName, _this.form1.password).then(result => {
+              if(_this.treeNode ===""){
+                _this.searchByXm()
+              }else{
+                _this.selectUser("", _this.treeNode, "");
+              }
               _this.$message({ message: "修改成功", type: "success" });
-              this.resetfrom();
-              this.dialogUpdataPass = false;
+              _this.resetfrom();
+              _this.dialogUpdataPass = false;
             })
             .catch(err => {});
         } else {
@@ -1340,6 +1384,7 @@ export default {
       if (this.currentRow == null || this.currentRow == "") {
         this.$message("请单击选中用户进行修改！");
       } else {
+        this.getTree(2, 1);
         this.dialogUserGroup = true;
         this.searchIuput = "";
         this.userName = this.currentRow.xm;
@@ -1353,6 +1398,7 @@ export default {
       if (this.currentRow == null || this.currentRow == "") {
         this.$message("请单击选中用户进行修改！");
       } else {
+        this.getTree(3, 1);
         this.dialogUserFlow = true;
         this.searchIuput = "";
         this.userName = this.currentRow.xm;
@@ -1432,17 +1478,21 @@ export default {
 
     //编辑按钮：回显用户信息
     handleEdit(index, row) {
+      this.getDictionary("user_position")
+      this.getDictionary("identity_type")
+      this.getDictionary("card_type")
       let _this = this;
       selectUseMessage(row.guid)
         .then(result => {
           // console.log(result.data.data);
+         // debugger
           _this.dialogEdit = true;
-          _this.formData = result.data.data.userMessage;
+          _this.formData = result.data.data;
           _this.imageUrl = result.data.data.url;
-          _this.formData.xb = result.data.data.userMessage.xb.toString();
-          _this.formData.type = result.data.data.userMessage.type.toString();
-          _this.formData.cardType = result.data.data.userMessage.cardType.toString();
-          _this.formData.duty = result.data.data.userMessage.duty.toString();
+          _this.formData.xb = result.data.data.xb.toString();
+          _this.formData.type = result.data.data.type.toString();
+          _this.formData.cardType = result.data.data.cardType.toString();
+          _this.formData.duty = result.data.data.duty.toString();
         })
         .catch(err => {});
     },
@@ -1453,7 +1503,12 @@ export default {
       let _this = this;
       restart(row.guid)
         .then(result => {
-          this.selectUser("", this.treeNode, "");
+          if(_this.treeNode===""){
+            _this.searchByXm()
+          }else{
+            _this.selectUser("", _this.treeNode, "");
+          }
+          
           this.$message({ message: "已启用", type: "success" });
         })
         .catch(err => {});
@@ -1464,7 +1519,12 @@ export default {
       let _this = this;
       deleteUser(row.guid)
         .then(result => {
-          this.selectUser("", this.treeNode, "");
+          if(_this.treeNode === ""){
+            _this.searchByXm()
+          }else{
+            _this.selectUser("", _this.treeNode, "");
+          }
+         
           this.$message({ message: "已禁用", type: "success" });
         })
         .catch(err => {});

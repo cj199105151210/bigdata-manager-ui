@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueQuillEditor from 'vue-quill-editor'
-import AvueUeditor from 'avue-plugin-ueditor'
+import BaiduMap from 'vue-baidu-map'
 
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
@@ -18,7 +18,7 @@ import 'swiper/dist/css/swiper.min.css'
 import basicContainer from './components/basic-container/main'
 
 import App from './App'
-import store from './store'
+import store from '@/store'
 import router from './router/router'
 import '@/permission' // permission control
 
@@ -28,7 +28,6 @@ import { validatenull } from '@/utils/validate'
 Vue.prototype.validatenull = validatenull
 
 /** 引入字体图标* */
-import './icons/' // icon
 import './styles/common.scss' // 基础样式
 // 注册全局容器
 Vue.component('basicContainer', basicContainer)
@@ -36,7 +35,9 @@ Vue.component('basicContainer', basicContainer)
 Vue.use(ElementUI)
 Vue.use(Avue)
 Vue.use(VueQuillEditor)
-Vue.use(AvueUeditor);
+Vue.use(BaiduMap, {
+  ak: '2OobiThLziiqOjO1CPbtnlGjjeb9v2Hw'
+})
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {

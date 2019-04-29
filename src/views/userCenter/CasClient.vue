@@ -38,8 +38,8 @@
         </el-form-item>
       </el-form>
       <div id="footer" style="margin-left:70%">
-        <el-button @click="submit('form1')" type="primary">确定</el-button>
-        <el-button @click="handleClose('form1')">取消</el-button>
+        <el-button @click="submit('form1')" type="primary" size="small">确定</el-button>
+        <el-button @click="handleClose('form1')" size="small">取消</el-button>
       </div>
     </el-dialog>
 
@@ -54,8 +54,8 @@
         </el-form-item>
       </el-form>
       <div id="footer" style="margin-left:70%">
-        <el-button @click="addSubmit('form1')" type="primary">确定</el-button>
-        <el-button @click="handleClose('form1')">取消</el-button>
+        <el-button @click="addSubmit('form1')" type="primary" size="small">确定</el-button>
+        <el-button @click="handleClose('form1')" size="small">取消</el-button>
       </div>
     </el-dialog>
   </div>

@@ -18,7 +18,6 @@
 import { mapGetters } from "vuex";
 import { validatenull } from "@/utils/validate";
 import config from "./config.js";
-import store from "@/store/";
 export default {
   name: "topbar",
   data() {

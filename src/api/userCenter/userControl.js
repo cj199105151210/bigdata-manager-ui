@@ -256,3 +256,10 @@ export function searchUser(xm) {
     }
   })
 }
+
+export function getDictionaryValue(codeValue) {
+  return request({
+    url: '/api/admin/dict/type/' + codeValue,
+    method: 'get'
+  })
+}

@@ -4,7 +4,7 @@
       <div class="main_middle_content">
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="信息管理" name="first">
-            <div class="grid-content bg-purple" v-if="activeName === 'first'? true:false ">
+            <div class="grid-content bg-purple" v-if="activeName == 'first'? true:false ">
               <el-form
                 :model="ruleForm2"
                 :rules="rules2"
@@ -21,8 +21,8 @@
                 <el-form-item label="头像">
                   <el-upload
                     class="avatar-uploader"
-                    action="/api/admin/file/upload"
                     :headers="headers"
+                    action="/api/admin/file/upload"
                     :show-file-list="false"
                     :before-upload="beforeAvatarUpload"
                     :on-success="handleAvatarSuccess"
@@ -34,13 +34,12 @@
                 </el-form-item>
                 <el-form-item>
                   <el-button size="small" type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-                  <el-button size="small" @click="resetForm('ruleForm2')">重置</el-button>
                 </el-form-item>
               </el-form>
             </div>
           </el-tab-pane>
           <el-tab-pane label="密码管理" name="second">
-            <div class="grid-content bg-purple" v-if="activeName === 'second'? true:false ">
+            <div class="grid-content bg-purple" v-if="activeName == 'second'? true:false ">
               <el-form
                 :model="ruleForm2"
                 :rules="rules2"
@@ -59,7 +58,6 @@
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" size="small" @click="submitForm('ruleForm2')">提交</el-button>
-                  <el-button size="small" @click="resetForm('ruleForm2')">重置</el-button>
                 </el-form-item>
               </el-form>
             </div>
@@ -72,8 +70,8 @@
 
 <script>
 import { handleImg, openWindow } from "@/utils/util";
-import { mapGetters, mapState } from "vuex";
-import store from "@/store/";
+import { mapGetters } from "vuex";
+import store from "@/store";
 import request from "@/utils/request";
 
 export default {
@@ -124,22 +122,23 @@ export default {
     };
   },
   created() {
-    this.initInFo();
+    if (this.$route.query.id) {
+      this.activeName = "second";
+    } else {
+      this.activeName = "first";
+      this.initInFo();
+    }
+    
   },
   computed: {
-    ...mapState({
-      userInfo: state => state.user.userInfo
-    }),
-    ...mapGetters(["userInfo"])
+    ...mapGetters(["userInfo", "access_token"])
   },
   methods: {
     initInFo() {
-      this.$store.dispatch("GetInfo").then(data => {
-        this.ruleForm2.username = data.sysUser.username;
-        this.ruleForm2.phone = data.sysUser.phone;
-        this.ruleForm2.avatar = data.sysUser.avatar;
-        handleImg(data.sysUser.avatar, "avatar");
-      });
+      this.ruleForm2.username = this.userInfo.username;
+      this.ruleForm2.phone = this.userInfo.phone;
+      this.ruleForm2.avatar = this.userInfo.avatar;
+      handleImg(this.userInfo.avatar, "avatar");
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -162,7 +161,7 @@ export default {
                   this.$store.dispatch("LogOut").then(() => {
                     location.reload(); // 为了重新实例化vue-router对象 避免bug
                   });
-                } 
+                }
               } else {
                 this.$notify({
                   title: "失败",
@@ -187,20 +186,12 @@ export default {
     },
     handleClick(tab, event) {
       if (tab.name == "first") {
-        handleImg(this.userInfo.avatar, "avatar");
-        this.ruleForm2.username = this.userInfo.username;
-        this.ruleForm2.phone = this.userInfo.phone;
+        this.initInFo();
       }
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
     },
     handleAvatarSuccess(res, file) {
       this.avatarUrl = URL.createObjectURL(file.raw);
       this.ruleForm2.avatar = res.data.bucketName + "-" + res.data.fileName;
-      this.$store.dispatch('setAavtar', 'avatar').then(res=>{
-      }).catch(()=>{
-      })
     },
     // 上传图片后基本大小格式验证
     beforeAvatarUpload(file) {

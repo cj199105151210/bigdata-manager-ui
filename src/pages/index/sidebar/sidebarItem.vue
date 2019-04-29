@@ -8,7 +8,7 @@
         :key="item[labelKey]"
         :class="{'is-active':vaildAvtive(item)}"
       >
-        <svg-icon :icon-class="item[iconKey]"/>
+        <i :class="item[iconKey]"/>
         <span slot="title" :alt="item[pathKey]">{{item[labelKey]}}</span>
       </el-menu-item>
 

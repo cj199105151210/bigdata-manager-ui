@@ -151,7 +151,7 @@ export const tableOption = {
       type: 'datetime',
       format: 'yyyy-MM-dd HH:mm',
       valueFormat: 'yyyy-MM-dd HH:mm:ss',
-      width: 150,
+      minWidth: 150,
       editDisabled: true,
       addVisdiplay: false,
       span: 24,

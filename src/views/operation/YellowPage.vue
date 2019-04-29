@@ -6,9 +6,9 @@
         <el-col :xs="24" :sm="24" :md="5" class="user__tree">
           <div class="main_left_content">
             <el-button-group style="margin:0 0 4% 10%">
-              <el-button type="primary" size="small" @click="insertNode">新增</el-button>
-              <el-button type="success" size="small" @click="updateNode">修改</el-button>
-              <el-button type="danger" size="small" @click="deleteNode">删除</el-button>
+              <el-button type="primary" size="mini" @click="insertNode">新增</el-button>
+              <el-button type="success" size="mini" @click="updateNode">修改</el-button>
+              <el-button type="danger" size="mini" @click="deleteNode">删除</el-button>
             </el-button-group>
             <el-tree
               :data="treeData"
@@ -25,15 +25,21 @@
 
         <el-col :xs="24" :sm="24" :md="19" class="user__main">
           <div class="main_right_content" style="height:520px">
-            <div v-show="!editDiv"  style="margin-left:40%;padding-top:5%">
-              <h1>机构名称:</h1>
-              <p>{{formData.name}}</p>
-              <h1>联系电话:</h1> 
-              <p>{{formData.phone}}</p>
-              <h1>创建时间:</h1>
-              <p>{{formData.createTime}}</p>
-              <h1>最后一次修改时间:</h1>
-              <p>{{formData.updateTime}} </p>
+            <div v-show="!editDiv"  style="margin-left:20%;padding-top:12%">
+              <el-form :model="formdata">
+                <el-form-item label="机构名:" label-width="160px">
+                  <el-input v-model="formData.name" style="width:40%" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="联系电话:" label-width="160px">
+                  <el-input v-model="formData.phone" style="width:40%" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="创建时间:" label-width="160px">
+                  <el-input v-model="formData.createTime" style="width:40%" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="最后一次修改时间:" label-width="160px">
+                  <el-input v-model="formData.updateTime" style="width:40%" :disabled="true"></el-input>
+                </el-form-item>
+              </el-form>
             </div>
             <div v-show="editDiv" style="margin-left:25%;padding-top:8%">
               <div v-if="addOrEdit">
@@ -78,11 +84,11 @@ export default {
       oldNode:'',
       formData: {
         guid: "",
-        name: "XXXXXX",
-        phone: "XXXXXX",
+        name: "",
+        phone: "",
         parentId: "",
-        createTime:'XXXXXX',
-        updateTime:'XXXXXX',
+        createTime:'',
+        updateTime:'',
         isDelete: "",
         flag:''
       },
@@ -128,6 +134,7 @@ export default {
     },
     //插入
     insertNode() {
+     // debugger
       if(this.formData.guid){
         this.oldNode = this.formData.name
         this.editDiv = true;
@@ -137,6 +144,18 @@ export default {
       }
      
     },
+    resetFormData(){
+        this.formData.guid=""
+        this.formData.name=""
+        this.formData.phone=""
+        this.formData.parentId=""
+        this.formData.createTime=""
+        this.formData.updateTime=""
+        this.formData.isDelete=""
+        this.formData.flag=""
+        this.oldNode = ''
+        this.flagNode = true
+    },
 
     //关闭
     close() {
@@ -144,6 +163,7 @@ export default {
       this.$refs.formData2.clearValidate();
       this.editDiv = false;
       this.addOrEdit = true;
+      this.resetFormData()
       this.selectYellowPage();
     },
     //保存

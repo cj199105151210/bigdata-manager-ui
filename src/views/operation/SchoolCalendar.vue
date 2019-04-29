@@ -1,5 +1,5 @@
 <template>
-  <div id="schoolCalendar">
+  <div>
     <basic-container>
       <div class="main_middle_content">
         <div v-show="showDiv" style="padding:1%">
@@ -15,7 +15,7 @@
                   size="small"
                   type="text"
                   icon="el-icon-edit"
-                >修改</el-button>
+                >编辑</el-button>
                 <el-button
                   @click="handleRead(scope.$index, scope.row)"
                   size="small"
@@ -91,7 +91,7 @@
 <script>
 import {selectAll,addRecord,updateRecord} from "@/api/operation/schoolCalendar";
 export default {
-  name: "middleLeave",
+  name: "schoolCalendar",
   data() {
     return {
       addTitle:"新增",
@@ -191,7 +191,6 @@ export default {
             addRecord(this.formData).then(result => {
               this.$message({ message: "保存成功！", type: "success" });
               this.back();
-              this.selectRecord();
             }).catch(err => {
               this.$message("保存出错，请重试！");
             });
@@ -199,7 +198,6 @@ export default {
             updateRecord(this.formData).then(result => {
               this.$message({ message: "保存成功！", type: "success" });
               this.back();
-              this.selectRecord();
             }).catch(err => {
               this.$message("保存出错，请重试！");
             });
@@ -221,9 +219,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  #schoolCalendar{
-    height: 100%;
-    // text-align: center;
-  }
 </style>
 

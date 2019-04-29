@@ -31,12 +31,12 @@ service.interceptors.request.use(config => {
   // let login_time = store.getters.login_time
   let expires_in = store.getters.expires_in
   let refresh_time = store.getters.refresh_time
-
-  if (!refresh_time == '' && !expires_in == '') {
+  if (refresh_time != '' && expires_in != '') {
     // 后面每次刷新
-    let time_contrast = current_Time - refresh_time
-    if (time_contrast >  Number(expires_in)/2) {
-      this.store.dispatch('RefreshToken')
+    let time_contrast = (current_Time - refresh_time) / 1000
+    if (time_contrast > (Number(expires_in) / 2)) {
+      refresh_time = ''
+      store.dispatch('RefreshToken')
     }
   }
 
@@ -52,7 +52,7 @@ service.interceptors.response.use(res => {
   const message = res.data.msg || errorCode[status] || errorCode['default']
   if (status === 401) {
     store.dispatch('FedLogOut').then(() => {
-      router.push({ path: '/login' })
+      this.$router.push({ path: '/login' })
     })
     return
   }
@@ -64,11 +64,11 @@ service.interceptors.response.use(res => {
     return Promise.reject(new Error(message))
   }
   // 无效token 失效功能
-  debugger
+ // debugger
   if (status === 200 && res.data.code === 7) {
-    
+
     store.dispatch('FedLogOut').then(() => {
-      router.push({ path: '/login' })
+      this.$router.push({ path: '/login' })
     })
     return
   }
